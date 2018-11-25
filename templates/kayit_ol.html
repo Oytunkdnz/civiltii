@@ -1,0 +1,12 @@
+{% extends 'giris_yapmayan_kullanici.html' %}
+
+{% block icerik %}
+<main role="main" class="inner">
+  <h1 class="cover-heading">Cıvıltı'ya kayıt ol!</h1>
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit">
+  </form>
+</main>
+{% endblock %}

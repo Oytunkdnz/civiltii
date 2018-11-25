@@ -1,0 +1,104 @@
+{% extends 'giris_yapan_kullanici.html' %}
+{% load static %}
+{% block icerik %}
+<div class="nav-scroller bg-white shadow-sm">
+      <nav class="nav nav-underline">
+        {% if user.username != profile.username %}
+        {% else %}
+        <a class="nav-link active" href="/takip_ettiklerim/">
+          Takip Ettiklerim
+          <span class="badge badge-pill bg-light align-text-bottom">{{ profile.follows.count }}</span>
+        </a>
+        <a class="nav-link active" href="/takip_edenler/">
+          Takip Edenler
+          <span class="badge badge-pill bg-light align-text-bottom">{{ profile.followed_by.count }}</span>
+        </a>
+        {% endif %}
+
+        <a class="nav-link active" href="/tum_kullanicilar">Tüm kullanıcılar</a>
+
+      </nav>
+</div>
+<br>
+
+
+    <main role="main" class="container">
+      <div class="d-flex align-items-center p-3 my-3 text-white-50 bg-danger rounded shadow-sm">
+          <img class="mr-3" src="/uploads/profil_resimleri/Hydrangeas.jpg" alt="" width="48" height="48">
+        <div class="lh-100">
+          {% if user.username != profile.username %}
+          <h6 class="mb-0 text-white lh-100">Profil</h6>
+          {% else %}
+          <h6 class="mb-0 text-white lh-100">Profilim</h6>
+          {% endif %}
+          <small>@{{ profile.username }}</small>
+        </div>
+      </div>
+      {% if user.username != profile.username %}
+            <form method="post">
+                {% csrf_token %}
+                {{ form.as_p }}
+                {% if not follows %}
+                <input class="btn btn-warning" type="submit" value="Takip et">
+                {% else %}
+                <input class="btn btn-success" type="submit" value="Takibi bırak">
+                {% endif %}
+            </form>
+      {% endif %}
+      <div class="my-3 p-3 bg-white rounded shadow-sm">
+        {% if user.username != profile.username %}
+        <h6 class="border-bottom border-gray pb-2 mb-0">Kullanıcının tweetleri</h6>
+        {% else %}
+        <h6 class="border-bottom border-gray pb-2 mb-0">Tweetlerim</h6>
+        {% endif %}
+        {% for tweet in timeline %}
+        <div class="media text-muted pt-3">
+          <p class="media-body pb-3 mb-0 small lh-125 border-bottom border-gray">
+            <strong class="d-block text-gray-dark">@{{ tweet.author.username }}</strong>
+            {{ tweet.text }}
+            <br>
+            <br>
+            {{ tweet.created }} | {{ tweet.author.first_name }} {{ tweet.author.last_name }}
+          </p>
+        </div>
+        {% endfor %}
+
+        <small class="d-block text-right mt-3">
+          <a href="#">Daha fazla göster</a>
+        </small>
+      </div>
+
+    </main>
+
+
+
+
+{% endblock %}
+<!--
+<div class="container">
+    <div class="row">
+        <div class="col-sm-3">
+            <div>{{ profile.username }}</div>
+            {% if user.username != profile.username %}
+            <form method="post">
+                {% csrf_token %}
+                {{ form.as_p }}
+                {% if not follows %}
+                <input class="btn btn-primary" type="submit" value="Takip et">
+                {% else %}
+                <input class="btn btn-danger" type="submit" value="Takibi bırak">
+                {% endif %}
+            </form>
+            {% endif %}
+        </div>
+        <div class="col-sm-9">
+            {% for tweet in timeline %}
+            <div>
+                <div>{{ tweet.text }}</div>
+                <div>{{ tweet.created }}</div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+-->
